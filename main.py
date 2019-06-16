@@ -22,7 +22,9 @@ driver.get('https://www.jobplanet.co.kr/companies/93880/interviews_by_filter?by_
 f = open('data.csv', 'w+', encoding='utf-8', newline='')
 wr = csv.writer(f, delimiter=',')
 wr.writerow([
-  'title',
+  'category',
+  'graduation',
+  'register date',
   'interview date',
   'interview title',
   'interview question',
@@ -48,17 +50,34 @@ for page_number in range(1, 100):
     interview_date = section.select('div > div.ctbody_col2 > dl > dd.txt1')
     content_title = section.select('div > div.ctbody_col2 > div > div.us_label_wrap')
     interview_question = section.select('div > div.ctbody_col2 > div > dl > dd:nth-child(2)')
-    interveiw_answer = section.select('div > div.ctbody_col2 > div > dl > dd:nth-child(4)')
+    interview_answer = section.select('div > div.ctbody_col2 > div > dl > dd:nth-child(4)')
     interview_result = section.select('div > div.ctbody_col2 > div > div.now_box > div > dl > dd:nth-child(2)')
+  
+    def get_text(tag):
+      return tag[0].text.strip() if len(tag) != 0 else ''
+
+    category = ''
+    graduation = ''
+    register_date = ''
+    title_text = get_text(title)
+    if title_text != '':
+      tokens = title_text.split('\n')
+      category = tokens[0]
+      graduation = tokens[2].strip()
+      register_date = tokens[5].strip()
+      
 
     d = [
-      title[0].text if len(title) != 0 else '', 
-      interview_date[0].text if len(interview_date) != 0 else '', 
-      content_title[0].text if len(content_title) != 0 else '', 
-      interview_question[0].text if len(interveiw_answer) != 0 else '', 
-      interveiw_answer[0].text if len(interveiw_answer) != 0 else ''
+      category,
+      graduation,
+      register_date,
+      get_text(interview_date),
+      get_text(content_title),
+      get_text(interview_question),
+      get_text(interview_answer)
     ]
     wr.writerow(d)
+
 
 f.close()
 driver.close()
