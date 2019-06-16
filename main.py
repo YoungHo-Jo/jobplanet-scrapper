@@ -28,7 +28,8 @@ wr.writerow([
   'interview date',
   'interview title',
   'interview question',
-  'interview answer'
+  'interview answer',
+  'interview result'
 ])
 
 for page_number in range(1, 100):
@@ -74,7 +75,8 @@ for page_number in range(1, 100):
       get_text(interview_date),
       get_text(content_title),
       get_text(interview_question),
-      get_text(interview_answer)
+      get_text(interview_answer),
+      get_text(interview_result)
     ]
     wr.writerow(d)
 
