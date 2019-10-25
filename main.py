@@ -17,7 +17,11 @@ driver.find_element_by_name('user[email]').send_keys(secret_json['id'])
 driver.find_element_by_name('user[password]').send_keys(secret_json['pwd'])
 
 driver.find_element_by_class_name('btn_sign_up').click()
-driver.get('https://www.jobplanet.co.kr/companies/93880/interviews_by_filter?by_occupation=11600&by_job_rank=&by_success=')
+
+print('Input the jobplanet site URL you want to parse(only interview pages...)');
+print("(includes ? parameters)")
+target = input()
+driver.get(target)
 
 f = open('data.csv', 'w+', encoding='utf-8', newline='')
 wr = csv.writer(f, delimiter=',')
@@ -33,7 +37,7 @@ wr.writerow([
 ])
 
 for page_number in range(1, 100):
-  driver.get('https://www.jobplanet.co.kr/companies/93880/interviews_by_filter?by_occupation=11600&by_job_rank=&by_success=&page={}'.format(page_number))
+  driver.get('{}&page={}'.format(target, page_number))
   driver.implicitly_wait(3)
   html = driver.page_source
   soup = bs(html, 'html.parser')
